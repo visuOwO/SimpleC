@@ -11,5 +11,5 @@ class Types {
         ~Types();
     private:
         std::vector<int> Dims;
-        int type;
+        int type{};
 };

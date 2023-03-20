@@ -8,12 +8,12 @@ public:
     IfStmt();
     IfStmt(Expr* cond, Stmt* then, Stmt* els);
     IfStmt(Expr* cond, Stmt* then);
-    ~IfStmt();
-    void print();
-    void check();
-    void genCode();
+    ~IfStmt() override;
+    void print() override;
+    void check() override;
+    void genCode() override;
 private:
-    Expr* cond;
-    Stmt* then;
-    Stmt* els;
+    Expr* cond{};
+    Stmt* then{};
+    Stmt* els{};
 };

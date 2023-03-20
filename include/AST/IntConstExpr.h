@@ -4,14 +4,14 @@
 class IntConstExpr: public Expr
 {
 protected:
-    int dval;
+    int dval{};
 public:
-    IntConstExpr(int d);
+    explicit IntConstExpr(int d);
     IntConstExpr();
-    ~IntConstExpr();
-    int getDval();
-    void print();
-    void check();
-    void genCode();
+    ~IntConstExpr() override;
+    int getDval() const;
+    void print() override;
+    void check() override;
+    void genCode() override;
 };
 

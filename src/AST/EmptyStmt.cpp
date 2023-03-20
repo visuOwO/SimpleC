@@ -1,12 +1,10 @@
 #include "AST/EmptyStmt.h"
 
 EmptyStmt::EmptyStmt()
-{
-}
+= default;
 
 EmptyStmt::~EmptyStmt()
-{
-}
+= default;
 
 void EmptyStmt::print()
 {

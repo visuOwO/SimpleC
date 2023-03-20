@@ -11,10 +11,10 @@ class Program: public ASTNode
 public:
     Program();
     Program(std::string funName, std::vector<ASTNode*> decls, std::vector<ASTNode*> stmts);
-    ~Program();
-    void print();
-    void check();
-    void genCode();
+    ~Program() override;
+    void print() override;
+    void check() override;
+    void genCode() override;
 private:
     std::string funName; 
     std::vector<ASTNode*> stmts;

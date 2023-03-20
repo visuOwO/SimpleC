@@ -1,17 +1,17 @@
 #include "AST/ArrayExpr.h"
 
+#include <utility>
+
 ArrayExpr::ArrayExpr()
-{
-}
+= default;
 
 ArrayExpr::~ArrayExpr()
-{
-}
+= default;
 
 ArrayExpr::ArrayExpr(std::string name, std::vector<Expr> exprs)
 {
-    this->name = name;
-    this->exprs = exprs;
+    this->name = std::move(name);
+    this->exprs = std::move(exprs);
 }
 
 std::string ArrayExpr::getName()
@@ -36,4 +36,14 @@ void ArrayExpr::print()
         }
     }
     std::cout << "]";
+}
+
+void ArrayExpr::check() {
+    for (auto & expr : exprs)
+        expr.check();
+}
+
+void ArrayExpr::genCode() {
+    for (auto & expr : exprs)
+        expr.genCode();
 }

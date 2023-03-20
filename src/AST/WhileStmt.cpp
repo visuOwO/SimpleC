@@ -1,8 +1,7 @@
 #include "AST/WhileStmt.h"
 
 WhileStmt::WhileStmt()
-{
-}
+= default;
 
 WhileStmt::WhileStmt(Expr* expr, Stmt* stmt)
 {

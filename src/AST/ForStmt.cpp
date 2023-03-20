@@ -1,8 +1,7 @@
 #include "AST/ForStmt.h"
 
 ForStmt::ForStmt()
-{
-}
+= default;
 
 ForStmt::ForStmt(Expr* init, Expr* cond, Expr* incr, Stmt* body)
 {

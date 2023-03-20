@@ -6,8 +6,8 @@
 #include <iostream>
 class ASTNode {
     public:
-        ASTNode() {}
-        virtual ~ASTNode() {}
+        ASTNode() = default;
+        virtual ~ASTNode() = default;
         virtual void print() = 0;
         virtual void check() = 0;
         virtual void genCode() = 0;

@@ -1,8 +1,7 @@
 #include "AST/IfStmt.h"
 
 IfStmt::IfStmt()
-{
-}
+= default;
 
 IfStmt::IfStmt(Expr* cond, Stmt* then, Stmt* els)
 {
@@ -15,7 +14,7 @@ IfStmt::IfStmt(Expr* cond, Stmt* then)
 {
     this->cond = cond;
     this->then = then;
-    this->els = NULL;
+    this->els = nullptr;
 }
 
 IfStmt::~IfStmt()
@@ -31,7 +30,7 @@ void IfStmt::print()
     cond->print();
     std::cout << ") ";
     then->print();
-    if (els != NULL)
+    if (els != nullptr)
     {
         std::cout << " else ";
         els->print();
@@ -42,7 +41,7 @@ void IfStmt::check()
 {
     cond->check();
     then->check();
-    if (els != NULL)
+    if (els != nullptr)
         els->check();
 }
 
@@ -52,7 +51,7 @@ void IfStmt::genCode()
     cond->genCode();
     std::cout << ") ";
     then->genCode();
-    if (els != NULL)
+    if (els != nullptr)
     {
         std::cout << " else ";
         els->genCode();

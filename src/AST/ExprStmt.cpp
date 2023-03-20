@@ -1,8 +1,7 @@
 #include "AST/ExprStmt.h"
 
 ExprStmt::ExprStmt()
-{
-}
+= default;
 
 ExprStmt::ExprStmt(Expr* expr)
 {

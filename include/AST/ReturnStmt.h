@@ -6,11 +6,11 @@ class ReturnStmt: public Stmt
 {
 public:
     ReturnStmt();
-    ReturnStmt(Expr* expr);
-    ~ReturnStmt();
-    void print();
-    void check();
-    void genCode();
+    explicit ReturnStmt(Expr* expr);
+    ~ReturnStmt() override;
+    void print() override;
+    void check() override;
+    void genCode() override;
 private:
-    Expr* expr;
+    Expr* expr{};
 };

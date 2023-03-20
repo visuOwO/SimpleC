@@ -6,10 +6,9 @@ DoubleConstExpr::DoubleConstExpr(double d)
 }
 
 DoubleConstExpr::~DoubleConstExpr()
-{
-}
+= default;
 
-double DoubleConstExpr::getDval()
+double DoubleConstExpr::getDval() const
 {
     return dval;
 }

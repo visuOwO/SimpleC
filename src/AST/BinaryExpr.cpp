@@ -1,14 +1,9 @@
 #include "AST/BinaryExpr.h"
 
-BinaryExpr::BinaryExpr()
-{
-}
-
 BinaryExpr::~BinaryExpr()
-{
-}
+= default;
 
-BinaryExpr::BinaryExpr(Expr left, Expr right, int op)
+BinaryExpr::BinaryExpr(const Expr& left, const Expr& right, int op)
 {
     this->left = left;
     this->right = right;

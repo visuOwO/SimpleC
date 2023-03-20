@@ -12,5 +12,5 @@ class ExprStmt: public Stmt
         void check();
         void genCode();
     private:
-        Expr* expr;
+        Expr* expr{};
 };

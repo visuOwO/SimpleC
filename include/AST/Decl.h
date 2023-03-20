@@ -6,12 +6,12 @@
 
 class Decl: public ASTNode {
     public:
-        Decl() {}
-        ~Decl() {}
+        Decl();
+        ~Decl() override;
         std::vector<int> Dims;
         std::string Name;
-        int type;
-        void print();
-        void check();
-        void genCode();
+        int type{};
+        void print() override;
+        void check() override;
+        void genCode() override;
 };

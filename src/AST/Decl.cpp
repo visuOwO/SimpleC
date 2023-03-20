@@ -1,14 +1,10 @@
 #include "AST/Decl.h"
 
 Decl::Decl()
-{
-    //ctor
-}
+= default;
 
 Decl::~Decl()
-{
-    //dtor
-}
+= default;
 
 void Decl::print()
 {

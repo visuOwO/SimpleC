@@ -7,8 +7,8 @@ class Expr: public ASTNode
 {
 public:
     Expr();
-    ~Expr();
-    virtual void print();
-    virtual void check();
-    virtual void genCode();
+    ~Expr() override;
+    void print() override;
+    void check() override;
+    void genCode() override;
 };

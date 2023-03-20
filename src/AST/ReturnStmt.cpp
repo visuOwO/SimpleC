@@ -1,8 +1,7 @@
 #include "AST/ReturnStmt.h"
 
 ReturnStmt::ReturnStmt()
-{
-}
+= default;
 
 ReturnStmt::ReturnStmt(Expr* expr)
 {

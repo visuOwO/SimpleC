@@ -10,5 +10,6 @@ public:
     virtual void check();
     virtual void genCode();
 protected:
-    int return_type;
+    int return_type{};
 };
+

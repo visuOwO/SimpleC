@@ -12,8 +12,8 @@
         void check();
         void genCode();
     private:
-        Expr* init;
-        Expr* cond;
-        Expr* incr;
-        Stmt* body;
+        Expr* init{};
+        Expr* cond{};
+        Expr* incr{};
+        Stmt* body{};
  };

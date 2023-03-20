@@ -1,17 +1,17 @@
 #include "AST/IdentExpr.h"
 
+#include <utility>
+
 IdentExpr::IdentExpr()
-{
-}
+= default;
 
 IdentExpr::IdentExpr(std::string ident)
 {
-    this->id = ident;
+    this->id = std::move(ident);
 }
 
 IdentExpr::~IdentExpr()
-{
-}
+= default;
 
 std::string IdentExpr::getId()
 {

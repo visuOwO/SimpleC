@@ -7,10 +7,10 @@ protected:
     double dval;
 public:
     DoubleConstExpr(double d);
-    ~DoubleConstExpr();
-    double getDval();
-    void print();
-    void check();
-    void genCode();
+    ~DoubleConstExpr() override;
+    double getDval() const;
+    void print() override;
+    void check() override;
+    void genCode() override;
 };
 

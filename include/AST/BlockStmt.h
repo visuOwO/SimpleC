@@ -7,13 +7,13 @@
  {
     public:
         BlockStmt();
-        ~BlockStmt();
+        ~BlockStmt() override;
 
         BlockStmt(std::vector<Stmt> stmts);
         std::vector<Stmt> getStmts();
-        void print();
-        void check();
-        void genCode();
+        void print() override;
+        void check() override;
+        void genCode() override;
     private:
         std::vector<Stmt> stmts;
 };

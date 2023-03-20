@@ -4,12 +4,11 @@
 class BinaryExpr: public Expr
 {
 public:
-    BinaryExpr();
-    ~BinaryExpr();
-    BinaryExpr(Expr left, Expr right, int op);
-    void print();
-    void check();
-    void genCode();
+    ~BinaryExpr() override;
+    BinaryExpr(const Expr& left, const Expr& right, int op);
+    void print() override;
+    void check() override;
+    void genCode() override;
     const static int ADD = 1;
     const static int MINUS = 2;
     const static int TIMES = 3;
@@ -30,6 +29,5 @@ public:
 private:
     Expr left;
     Expr right;
-    int op;
-    //TODO: implement this
+    int op{};
 };

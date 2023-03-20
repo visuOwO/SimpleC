@@ -12,6 +12,6 @@ public:
     void check();
     void genCode();
 private:
-    Expr* expr;
-    Stmt* stmt;
+    Expr* expr{};
+    Stmt* stmt{};
 };

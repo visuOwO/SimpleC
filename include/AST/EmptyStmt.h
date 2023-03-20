@@ -6,7 +6,7 @@ class EmptyStmt: public Stmt
 public:
     EmptyStmt();
     ~EmptyStmt();
-    void print();
-    void check();
-    void genCode();
+    void print() override;
+    void check() override;
+    void genCode() override;
 };

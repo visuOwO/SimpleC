@@ -1,16 +1,16 @@
 #include "AST/BlockStmt.h"
 
+#include <utility>
+
 BlockStmt::BlockStmt()
-{
-}
+= default;
 
 BlockStmt::~BlockStmt()
-{
-}
+= default;
 
 BlockStmt::BlockStmt(std::vector<Stmt> stmts)
 {
-    this->stmts = stmts;
+    this->stmts = std::move(stmts);
 }
 
 std::vector<Stmt> BlockStmt::getStmts()
@@ -21,9 +21,9 @@ std::vector<Stmt> BlockStmt::getStmts()
 void BlockStmt::print()
 {
     std::cout << "{" << std::endl;
-    for (int i = 0; i < stmts.size(); i++)
+    for (auto & stmt : stmts)
     {
-        stmts[i].print();
+        stmt.print();
         std::cout << std::endl;
     }
     std::cout << "}";
@@ -31,16 +31,16 @@ void BlockStmt::print()
 
 void BlockStmt::check()
 {
-    for (int i = 0; i < stmts.size(); i++)
+    for (auto & stmt : stmts)
     {
-        stmts[i].check();
+        stmt.check();
     }
 }
 
 void BlockStmt::genCode()
 {
-    for (int i = 0; i < stmts.size(); i++)
+    for (auto & stmt : stmts)
     {
-        stmts[i].genCode();
+        stmt.genCode();
     }
 }   
