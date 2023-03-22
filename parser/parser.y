@@ -23,20 +23,37 @@
 	ForStmt *forStmt;
 	WhileStmt *whileStmt;
 	LExpr *l_expr;
+	IdentExpr *identExpr;
+	int INTCONST;
+	double DOUBLECONST;
 }
 
 %token INT DOUBLE RETURN IF ELSE WHILE FOR
 %token PLUS MINUS MUL DIV MOD ASSIGN
 %token PLUSASSIGN MINUSASSIGN MULASSIGN DIVASSIGN MODASSIGN
 %token LT GT LE GE EQ NE
-%token INTCONST DOUBLECONST
+%token INTCONST DOUBLECONST IDENT
 %token LPAREN RPAREN LBRACE RBRACE LBRACK RBRACK SEMICOLON
 
 %type <program> program
 %type <decl> declList decl
 %type <stmt> stmtList stmt
 %type <expr> expr l_expr arrayDim binaryExpr
-%type <ident> IDENT
+%type <identExpr> IDENT
+%type <arrayDecl> arrayDecl
+%type <forStmt> forStmt
+%type <whileStmt> whileStmt
+%type <int> INTCONST
+%type <double> DOUBLECONST
+
+%right ASSIGN PLUSASSIGN MINUSASSIGN MULASSIGN DIVASSIGN MODASSIGN
+%left EQ NE
+%left LT GT LE GE
+%left PLUS MINUS
+%left MUL DIV MOD
+
+%left ELSE
+
 
 %%
 
