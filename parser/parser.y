@@ -10,85 +10,110 @@
 %}
 
 %union {
-	ASTNode *node;
-	int op;
+	Program *program;
+	LinkedList<Decl> *declList;
+	Decl *decl;
+	LinkedList<Stmt> *stmtList;
+	Stmt *stmt;
+	LinkedList<Expr> *exprList;
+	Expr *expr;
+	LinkedList<Integer> *arrayDecl;
+	LinkedList<Expr> *arrayDim;
+	BinaryExpr *binaryExpr;
+	ForStmt *forStmt;
+	WhileStmt *whileStmt;
+	LExpr *l_expr;
 }
 
-%type <node> program declList decl stmtList stmt expr l_expr arrayDim binaryExpr whileStmt forStmt
+%token INT DOUBLE RETURN IF ELSE WHILE FOR
+%token PLUS MINUS MUL DIV MOD ASSIGN
+%token PLUSASSIGN MINUSASSIGN MULASSIGN DIVASSIGN MODASSIGN
+%token LT GT LE GE EQ NE
+%token INTCONST DOUBLECONST
+%token LPAREN RPAREN LBRACE RBRACE LBRACK RBRACK SEMICOLON
 
-%right
-%left
-
+%type <program> program
+%type <decl> declList decl
+%type <stmt> stmtList stmt
+%type <expr> expr l_expr arrayDim binaryExpr
+%type <ident> IDENT
 
 %%
 
-program : INT IDENT:i LPAREN RPAREN LBRACE declList:dl stmtList:sl RBRACE
-            {: RESULT = new Program(i, Types.INT, dl, sl); :}
-          | DOUBLE IDENT:i LPAREN RPAREN LBRACE declList:dl stmtList:sl RBRACE
-	    {: RESULT = new Program(i, Types.DOUBLE, dl, sl); :}
+program : INT IDENT LPAREN RPAREN LBRACE declList stmtList RBRACE
+            {
+            	$$ = new Program($2, Types.INT, $6, $7);
+            }
+          | DOUBLE IDENT LPAREN RPAREN LBRACE declList stmtList RBRACE
+	    	{
+	    		$$ = new Program($2, Types.DOUBLE, $6, $7);
+	    	}
 ;
-declList : /* empty list */ {: RESULT = new LinkedList<Decl>(); :}
-           | decl:d declList:l {: l.add(0,d); RESULT = l; :}
+declList : /* empty list */ { $$ = new LinkedList<Decl>(); }
+           | decl declList {
+           		$2.add(0, $1);
+           		$$ = $2;
+           }
 ;
-decl : INT IDENT:i arrayDecl:a SEMICOLON {: RESULT = new Decl(i, Types.INT, a); :}
-       | DOUBLE IDENT:i arrayDecl:a SEMICOLON {: RESULT = new Decl(i, Types. DOUBLE, a); :}
+decl : INT IDENT arrayDecl SEMICOLON { $$ = new Decl($2, Types.INT, $3); }
+       | DOUBLE IDENT arrayDecl SEMICOLON { $$ = new Decl($2, Types.DOUBLE, $3);}
 ;
-arrayDecl : /* empty list */ {: RESULT = new LinkedList<Integer>(); :}
-            | LBRACK INTCONST:ic RBRACK arrayDecl:a {: a.add(0,ic); RESULT = a; :}
+arrayDecl : /* empty list */ { $$ = new LinkedList<Integer>(); }
+            | LBRACK INTCONST RBRACK arrayDecl { $4.add(0, $2); $$ = $4; }
 ;
-stmtList : /* empty list */ {: RESULT = new LinkedList<Stmt>(); :}
-           | stmt:s stmtList:l  {: l.add(0,s); RESULT = l; :}
+stmtList : /* empty list */ { $$ = new LinkedList<Stmt>(); }
+           | stmt stmtList  { $2.add(0,$1); $$ = $2; }
 ;
-stmt : expr:e SEMICOLON {: RESULT = new ExprStmt(e); :}
-       | RETURN expr:e SEMICOLON {: RESULT = new ReturnStmt(e); :}
-       | LBRACE stmtList:l RBRACE {: RESULT = new BlockStmt(l); :}
-       | IF LPAREN expr:e RPAREN stmt:s
-         {: RESULT = new IfStmt(e, s); :}
-       | IF LPAREN expr:e RPAREN stmt:s1 ELSE stmt:s2
-         {: RESULT = new IfStmt(e, s1, s2); :}
-       | SEMICOLON {: RESULT = new EmptyStmt(); :}
-       | forStmt:f {: RESULT = f; :}
-         | whileStmt:w {: RESULT = w; :}
+stmt : expr SEMICOLON { $$ = new ExprStmt($1); }
+       | RETURN expr SEMICOLON { $$ = new ReturnStmt($2); }
+       | LBRACE stmtList RBRACE { $$ = new BlockStmt($2); }
+       | IF LPAREN expr RPAREN stmt
+         { $$ = new IfStmt($3, $5, null); }
+       | IF LPAREN expr RPAREN stmt ELSE stmt
+         { $$ = new IfStmt($3, $5, $7); }
+       | SEMICOLON { $$ = new EmptyStmt(); }
+       | forStmt { $$ = $1; }
+         | whileStmt { $$ = $1; }
 ;
-expr : INTCONST:ic {: RESULT = new IntConstExpr(ic); :}
-       | DOUBLECONST:dc {: RESULT = new DoubleConstExpr(dc); :}
-       | l_expr:e {: RESULT = e; :}
-       | LPAREN expr:e RPAREN {: RESULT = e; :}
-       | binaryExpr:e {: RESULT = e; :}
-;
-
-l_expr : IDENT:i {: RESULT = new IdentExpr(i); :}
-         | IDENT:i arrayDim:a {: RESULT = new ArrayExpr(i, a); :}
-;
-arrayDim : LBRACK expr:e RBRACK {: RESULT = new LinkedList<Expr>(); RESULT.add(e); :}
-           | LBRACK expr:e RBRACK arrayDim:a {: a.add(0,e); RESULT = a; :}
-;
-
-
-binaryExpr : expr:e1 PLUS expr:e2 {: RESULT = new BinaryExpr(e1, BinaryExpr.PLUS, e2); :}
-             | expr:e1 MUL expr:e2 {: RESULT = new BinaryExpr(e1, BinaryExpr.MUL, e2); :}
-             | expr:e1 ASSIGN expr:e2 {: RESULT = new BinaryExpr(e1, BinaryExpr.ASSIGN, e2); :}
-             | expr:e1 MINUS expr:e2 {: RESULT = new BinaryExpr(e1, BinaryExpr.MINUS, e2); :}
-             | expr:e1 DIV expr:e2 {: RESULT = new BinaryExpr(e1, BinaryExpr.DIV, e2); :}
-             | expr:e1 MOD expr:e2 {: RESULT = new BinaryExpr(e1, BinaryExpr.MOD, e2); :}
-             | expr:e1 PLUSASSIGN expr:e2 {: RESULT = new BinaryExpr(e1, BinaryExpr.PLUSASSIGN, e2); :}
-             | expr:e1 MINUSASSIGN expr:e2 {: RESULT = new BinaryExpr(e1, BinaryExpr.MINUSASSIGN, e2); :}
-             | expr:e1 MULASSIGN expr:e2 {: RESULT = new BinaryExpr(e1, BinaryExpr.MULASSIGN, e2); :}
-             | expr:e1 DIVASSIGN expr:e2 {: RESULT = new BinaryExpr(e1, BinaryExpr.DIVASSIGN, e2); :}
-             | expr:e1 MODASSIGN expr:e2 {: RESULT = new BinaryExpr(e1, BinaryExpr.MODASSIGN, e2); :}
-             | expr:e1 LT expr:e2 {: RESULT = new BinaryExpr(e1, BinaryExpr.LT, e2); :}
-                | expr:e1 GT expr:e2 {: RESULT = new BinaryExpr(e1, BinaryExpr.GT, e2); :}
-                | expr:e1 LE expr:e2 {: RESULT = new BinaryExpr(e1, BinaryExpr.LE, e2); :}
-                | expr:e1 GE expr:e2 {: RESULT = new BinaryExpr(e1, BinaryExpr.GE, e2); :}
-                | expr:e1 EQ expr:e2 {: RESULT = new BinaryExpr(e1, BinaryExpr.EQ, e2); :}
-                | expr:e1 NE expr:e2 {: RESULT = new BinaryExpr(e1, BinaryExpr.NE, e2); :}
+expr : INTCONST { $$ = new IntConstExpr($1); }
+       | DOUBLECONST { $$ = new DoubleConstExpr($1); }
+       | l_expr { $$ = $1; }
+       | LPAREN expr RPAREN { $$ = $2; }
+       | binaryExpr { $$ = $1; }
 ;
 
-whileStmt : WHILE LPAREN expr:e RPAREN stmt:s
-             {: RESULT = new WhileStmt(e, s); :}
+l_expr : IDENT { $$ = new IdentExpr($1); }
+         | IDENT arrayDim { $$ = new ArrayExpr($1, $2); }
 ;
-forStmt : FOR LPAREN expr:e1 SEMICOLON expr:e2 SEMICOLON expr:e3 RPAREN stmt:s
-           {: RESULT = new ForStmt(e1, e2, e3, s); :}
+arrayDim : LBRACK expr RBRACK { $$ = new LinkedList<Expr>(); $$.add(0, $2); }
+           | LBRACK expr RBRACK arrayDim { $4.add(0, $2); $$ = $4; }
+;
+
+
+binaryExpr : expr PLUS expr { $$ = new BinaryExpr($1, BinaryExpr.PLUS, $3); }
+             | expr MUL expr { $$ = new BinaryExpr($1, BinaryExpr.MUL, $3); }
+             | expr ASSIGN expr { $$ = new BinaryExpr($1, BinaryExpr.ASSIGN, $3); }
+             | expr MINUS expr  { $$ = new BinaryExpr($1, BinaryExpr.MINUS, $3); }
+             | expr DIV expr  { $$ = new BinaryExpr($1, BinaryExpr.DIV, $3); }
+             | expr MOD expr { $$ = new BinaryExpr($1, BinaryExpr.MOD, $3); }
+             | expr PLUSASSIGN expr  { $$ = new BinaryExpr($1, BinaryExpr.PLUSASSIGN, $3); }
+             | expr MINUSASSIGN expr { $$ = new BinaryExpr($1, BinaryExpr.MINUSASSIGN, $3); }
+             | expr MULASSIGN expr { $$ = new BinaryExpr($1, BinaryExpr.MULASSIGN, $3); }
+             | expr DIVASSIGN expr { $$ = new BinaryExpr($1, BinaryExpr.DIVASSIGN, $3); }
+             | expr MODASSIGN expr { $$ = new BinaryExpr($1, BinaryExpr.MODASSIGN, $3); }
+		     | expr LT expr { $$ = new BinaryExpr($1, BinaryExpr.LT, $3); }
+                | expr GT expr { $$ = new BinaryExpr($1, BinaryExpr.GT, $3); }
+                | expr LE expr { $$ = new BinaryExpr($1, BinaryExpr.LE, $3); }
+                | expr GE expr { $$ = new BinaryExpr($1, BinaryExpr.GE, $3); }
+                | expr EQ expr { $$ = new BinaryExpr($1, BinaryExpr.EQ, $3); }
+                | expr NE expr { $$ = new BinaryExpr($1, BinaryExpr.NE, $3); }
+;
+
+whileStmt : WHILE LPAREN expr RPAREN stmt
+	   { $$ = new WhileStmt($3, $5); }
+;
+forStmt : FOR LPAREN expr SEMICOLON expr SEMICOLON expr RPAREN stmt
+		{ $$ = new ForStmt($3, $5, $7, $9); }
 ;
 
 
