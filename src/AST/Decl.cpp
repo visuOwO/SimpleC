@@ -13,10 +13,19 @@ void Decl::print()
 
 void Decl::check()
 {
-    std::cout << "Decl check" << std::endl;
+    if (this->symbolTable.find(this->Name) != this->symbolTable.end()) {
+        std::cout << "Error: Redeclaration of variable " << this->Name << std::endl;
+        exit(1);
+    }
+    this->type.check();
 }
 
 void Decl::genCode()
 {
     std::cout << "Decl genCode" << std::endl;
+}
+
+Decl::Decl(std::string name, const Types& type) {
+    this->Name = std::move(name);
+    this->type = type;
 }

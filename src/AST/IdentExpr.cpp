@@ -25,6 +25,8 @@ void IdentExpr::print()
 
 void IdentExpr::check()
 {
+    if (this->getSymbolTable().find(this->id) == this->getSymbolTable().end())
+        throw SemanticException("Variable " + this->id + " not declared");
 }
 
 void IdentExpr::genCode()

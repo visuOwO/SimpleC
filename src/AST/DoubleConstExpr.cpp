@@ -20,7 +20,6 @@ void DoubleConstExpr::print()
 
 void DoubleConstExpr::check()
 {
-    std::cout << "DoubleConstExpr check" << std::endl;
 }
 
 void DoubleConstExpr::genCode()

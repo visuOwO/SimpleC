@@ -1,16 +1,17 @@
 #include "../exceptions/SemanticException.h"
 #include <vector>
 #include <string>
-#include "ASTNode.h"
+#include "AST/ASTNode.h"
+#include "AST/Tokens.h"
 
 
 class Decl: public ASTNode {
     public:
         Decl();
+        Decl(std::string name, const Types& type);
         ~Decl() override;
-        std::vector<int> Dims;
         std::string Name;
-        int type{};
+        Types type{};
         void print() override;
         void check() override;
         void genCode() override;

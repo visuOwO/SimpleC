@@ -1,56 +1,45 @@
-#include "AST/AST.h"
+%{
+	#include "AST/AST.h"
+	#include <stdio.h>
+	#include <stdlib.h>
+	#include <string.h>
+	#include <ctype.h>
 
-/* punctuators */
-%token SEMICOLON, LPAREN, RPAREN, LBRACK, RBRACK, LBRACE, RBRACE, ASSIGN, PLUS, MUL;
-%token MINUS, DIV, MOD, PLUSASSIGN, MINUSASSIGN, MULASSIGN, DIVASSIGN, MODASSIGN;
-%token LT, GT, LE, GE, EQ, NE;
-/* numeric literals */
-%token Integer INTCONST;
-%token Double  DOUBLECONST;
-/* names */
-%token String IDENT;
+	int yyerror(char *s);
+	int yylex();
+%}
 
-%type <Program> program;
-%type <LinkedList<Decl>> declList;
-%type <Decl> decl;
-%type <LinkedList<Integer>> arrayDecl;
-%type <LinkedList<Stmt>> stmtList;
-%type <Stmt> stmt;
-%type <Expr> expr;
-%type <Expr> l_expr;
-%type <LinkedList<Expr>> arrayDim;
-%type <BinaryExpr> binaryExpr;
-+
+%union {
+	ASTNode *node;
+	int op;
+}
+
+%type <node> program declList decl stmtList stmt expr l_expr arrayDim binaryExpr whileStmt forStmt
+
+%right
+%left
 
 
-precedence right ASSIGN,PLUSASSIGN,MINUSASSIGN,MULASSIGN,DIVASSIGN,MODASSIGN;
-precedence left EQ,NE;
-precedence left LT,GT,LE,GE;
-precedence left PLUS,MINUS;
-precedence left MUL,DIV,MOD;
+%%
 
-
-precedence left ELSE; // resolve "dangling else" ambiguity
-start with program;
-
-program ::= INT IDENT:i LPAREN RPAREN LBRACE declList:dl stmtList:sl RBRACE
+program : INT IDENT:i LPAREN RPAREN LBRACE declList:dl stmtList:sl RBRACE
             {: RESULT = new Program(i, Types.INT, dl, sl); :}
           | DOUBLE IDENT:i LPAREN RPAREN LBRACE declList:dl stmtList:sl RBRACE
 	    {: RESULT = new Program(i, Types.DOUBLE, dl, sl); :}
 ;
-declList ::= /* empty list */ {: RESULT = new LinkedList<Decl>(); :}
+declList : /* empty list */ {: RESULT = new LinkedList<Decl>(); :}
            | decl:d declList:l {: l.add(0,d); RESULT = l; :}
 ;
-decl ::= INT IDENT:i arrayDecl:a SEMICOLON {: RESULT = new Decl(i, Types.INT, a); :}
+decl : INT IDENT:i arrayDecl:a SEMICOLON {: RESULT = new Decl(i, Types.INT, a); :}
        | DOUBLE IDENT:i arrayDecl:a SEMICOLON {: RESULT = new Decl(i, Types. DOUBLE, a); :}
 ;
-arrayDecl ::= /* empty list */ {: RESULT = new LinkedList<Integer>(); :}
+arrayDecl : /* empty list */ {: RESULT = new LinkedList<Integer>(); :}
             | LBRACK INTCONST:ic RBRACK arrayDecl:a {: a.add(0,ic); RESULT = a; :}
 ;
-stmtList ::= /* empty list */ {: RESULT = new LinkedList<Stmt>(); :}
+stmtList : /* empty list */ {: RESULT = new LinkedList<Stmt>(); :}
            | stmt:s stmtList:l  {: l.add(0,s); RESULT = l; :}
 ;
-stmt ::= expr:e SEMICOLON {: RESULT = new ExprStmt(e); :}
+stmt : expr:e SEMICOLON {: RESULT = new ExprStmt(e); :}
        | RETURN expr:e SEMICOLON {: RESULT = new ReturnStmt(e); :}
        | LBRACE stmtList:l RBRACE {: RESULT = new BlockStmt(l); :}
        | IF LPAREN expr:e RPAREN stmt:s
@@ -61,21 +50,22 @@ stmt ::= expr:e SEMICOLON {: RESULT = new ExprStmt(e); :}
        | forStmt:f {: RESULT = f; :}
          | whileStmt:w {: RESULT = w; :}
 ;
-expr ::= INTCONST:ic {: RESULT = new IntConstExpr(ic); :}
+expr : INTCONST:ic {: RESULT = new IntConstExpr(ic); :}
        | DOUBLECONST:dc {: RESULT = new DoubleConstExpr(dc); :}
        | l_expr:e {: RESULT = e; :}
        | LPAREN expr:e RPAREN {: RESULT = e; :}
        | binaryExpr:e {: RESULT = e; :}
 ;
 
-l_expr ::= IDENT:i {: RESULT = new IdentExpr(i); :}
+l_expr : IDENT:i {: RESULT = new IdentExpr(i); :}
          | IDENT:i arrayDim:a {: RESULT = new ArrayExpr(i, a); :}
 ;
-arrayDim ::= LBRACK expr:e RBRACK {: RESULT = new LinkedList<Expr>(); RESULT.add(e); :}
+arrayDim : LBRACK expr:e RBRACK {: RESULT = new LinkedList<Expr>(); RESULT.add(e); :}
            | LBRACK expr:e RBRACK arrayDim:a {: a.add(0,e); RESULT = a; :}
 ;
-/* TODO: add more operators */
-binaryExpr ::= expr:e1 PLUS expr:e2 {: RESULT = new BinaryExpr(e1, BinaryExpr.PLUS, e2); :}
+
+
+binaryExpr : expr:e1 PLUS expr:e2 {: RESULT = new BinaryExpr(e1, BinaryExpr.PLUS, e2); :}
              | expr:e1 MUL expr:e2 {: RESULT = new BinaryExpr(e1, BinaryExpr.MUL, e2); :}
              | expr:e1 ASSIGN expr:e2 {: RESULT = new BinaryExpr(e1, BinaryExpr.ASSIGN, e2); :}
              | expr:e1 MINUS expr:e2 {: RESULT = new BinaryExpr(e1, BinaryExpr.MINUS, e2); :}
@@ -94,10 +84,10 @@ binaryExpr ::= expr:e1 PLUS expr:e2 {: RESULT = new BinaryExpr(e1, BinaryExpr.PL
                 | expr:e1 NE expr:e2 {: RESULT = new BinaryExpr(e1, BinaryExpr.NE, e2); :}
 ;
 
-whileStmt ::= WHILE LPAREN expr:e RPAREN stmt:s
+whileStmt : WHILE LPAREN expr:e RPAREN stmt:s
              {: RESULT = new WhileStmt(e, s); :}
 ;
-forStmt ::= FOR LPAREN expr:e1 SEMICOLON expr:e2 SEMICOLON expr:e3 RPAREN stmt:s
+forStmt : FOR LPAREN expr:e1 SEMICOLON expr:e2 SEMICOLON expr:e3 RPAREN stmt:s
            {: RESULT = new ForStmt(e1, e2, e3, s); :}
 ;
 

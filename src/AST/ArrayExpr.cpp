@@ -39,8 +39,10 @@ void ArrayExpr::print()
 }
 
 void ArrayExpr::check() {
-    for (auto & expr : exprs)
+    for (auto & expr : exprs) {
+        expr.setSymbolTable(this->symbolTable);
         expr.check();
+    }
 }
 
 void ArrayExpr::genCode() {
