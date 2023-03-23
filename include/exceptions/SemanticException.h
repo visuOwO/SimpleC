@@ -6,7 +6,7 @@ class SemanticException : public std::exception {
     public:
         SemanticException(std::string msg) : msg(msg) {}
         virtual ~SemanticException() throw() {}
-        virtual const char* what() const throw() {
+        virtual const char* what() const noexcept override {
             return msg.c_str();
         }
     private:

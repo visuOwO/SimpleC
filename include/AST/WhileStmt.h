@@ -7,10 +7,10 @@ class WhileStmt: public Stmt
 public:
     WhileStmt();
     WhileStmt(Expr* expr, Stmt* stmt);
-    ~WhileStmt();
-    void print();
-    void check();
-    void genCode();
+    ~WhileStmt() override;
+    void print() override;
+    void check() override;
+    void genCode() override;
 private:
     Expr* expr{};
     Stmt* stmt{};

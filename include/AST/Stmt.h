@@ -5,10 +5,10 @@ class Stmt: public ASTNode
 {
 public:
     Stmt();
-    ~Stmt();
-    virtual void print();
-    virtual void check();
-    virtual void genCode();
+    ~Stmt() override;
+    void print() override;
+    void check() override;
+    void genCode() override ;
 protected:
     int return_type{};
 };

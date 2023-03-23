@@ -6,11 +6,11 @@
  {
     public:
         ForStmt();
-        ~ForStmt();
+        ~ForStmt() override;
         ForStmt(Expr* init, Expr* cond, Expr* incr, Stmt* body);
-        void print();
-        void check();
-        void genCode();
+        void print() override;
+        void check() override;
+        void genCode() override;
     private:
         Expr* init{};
         Expr* cond{};
