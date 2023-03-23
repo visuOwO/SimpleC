@@ -3,11 +3,11 @@
     #include <cstdlib>
     #include <string>
     #include <vector>
-    #include "parser.hpp"
     #include "AST/AST.h"
+    #include "parser.hpp"
 
-    int symbol(char* name, int token) {
-        printf("%s\n", name);
+    int symbol(std::string name, int token) {
+        std::cout << name << std::endl;
         return token;
     }
 %}
@@ -86,24 +86,24 @@ comments  \/\/({new_line}|[^])*|\/\*([^*]|\*+[^*/])*\*+\/
 
 
 "="               { return symbol("=",  ASSIGN); }
-"+"              { return symbol("+",  PLUS); }
-"*"              { return symbol("*",  MUL); }
+"+"              { return symbol("+",  ADD); }
+"*"              { return symbol("*",  TIMES); }
 "-"              { return symbol("-",  MINUS); }
-"/"              { return symbol("/",  DIV); }
+"/"              { return symbol("/",  DIVIDE); }
 "%"              { return symbol("%",  MOD); }
-"+="              { return symbol("+=", PLUSASSIGN); }
+"+="              { return symbol("+=", ADDASSIGN); }
 "-="              { return symbol("-=", MINUSASSIGN); }
-"*="              { return symbol("*=", MULASSIGN); }
-"/="              { return symbol("/=", DIVASSIGN); }
+"*="              { return symbol("*=", TIMESASSIGN); }
+"/="              { return symbol("/=", DIVIDEASSIGN); }
 "%="              { return symbol("%=", MODASSIGN); }
 
 
-"<"             { return symbol("<",  LT); }
-"<="            { return symbol("<=", LE); }
-">"             { return symbol(">",  GT); }
-">="            { return symbol(">=", GE); }
-"=="            { return symbol("==", EQ); }
-"!="            { return symbol("!=", NE); }
+"<"             { return symbol("<",  LESS); }
+"<="            { return symbol("<=", LESSEQUAL); }
+">"             { return symbol(">",  GREATER); }
+">="            { return symbol(">=", GREATEREQUAL); }
+"=="            { return symbol("==", EQUAL); }
+"!="            { return symbol("!=", NOTEQUAL); }
 
 
 {comments}      { /* ignore comments */ }

@@ -16,16 +16,16 @@
 	Decl *decl;
 	Stmt *stmt;
 	Expr *expr, *l_expr, *identExpr, *binaryExpr;
-	std::vector<int*> *arrayDecl;
+	std::vector<int> *arrayDecl;
 	std::string *ident;
 	int intconst;
 	double doubleconst;
 }
 
 %token INT DOUBLE RETURN IF ELSE WHILE FOR
-%token PLUS MINUS MUL DIV MOD ASSIGN
-%token PLUSASSIGN MINUSASSIGN MULASSIGN DIVASSIGN MODASSIGN
-%token LT GT LE GE EQ NE
+%token ADD MINUS TIMES DIVIDE MOD ASSIGN
+%token ADDASSIGN MINUSASSIGN TIMESASSIGN DIVIDEASSIGN MODASSIGN
+%token LESSEQUAL GREATER LESS GREATEREQUAL EQUAL NOTEQUAL
 %token LPAREN RPAREN LBRACE RBRACE LBRACK RBRACK SEMICOLON
 %token <intconst> INTCONST
 %token <doubleconst> DOUBLECONST
@@ -41,11 +41,11 @@
 %type <arrayDim> arrayDim
 
 
-%right ASSIGN PLUSASSIGN MINUSASSIGN MULASSIGN DIVASSIGN MODASSIGN
-%left EQ NE
-%left LT GT LE GE
-%left PLUS MINUS
-%left MUL DIV MOD
+%right ASSIGN ADDASSIGN MINUSASSIGN TIMESASSIGN DIVIDEASSIGN MODASSIGN
+%left EQUAL NOTEQUAL
+%left LESSEQUAL GREATER LESS GREATEREQUAL
+%left ADD MINUS
+%left TIMES DIVIDE MOD
 %left ELSE
 
 %%
@@ -84,7 +84,7 @@ stmt : expr SEMICOLON { $$ = new ExprStmt($1); }
 ;
 
 ifStmt : IF LPAREN expr RPAREN stmt
-         { $$ = new IfStmt($3, $5, null); }
+         { $$ = new IfStmt($3, $5, nullptr); }
        | IF LPAREN expr RPAREN stmt ELSE stmt
          { $$ = new IfStmt($3, $5, $7); }
 
@@ -98,28 +98,28 @@ expr : INTCONST { $$ = new IntConstExpr($1); }
 l_expr : IDENT { $$ = new IdentExpr($1); }
          | IDENT arrayDim { $$ = new ArrayExpr($1, $2); }
 ;
-arrayDim : LBRACK expr RBRACK { $$ = new std::vector<ASTNode*>(); $$->add(0, $2); }
-           | LBRACK expr RBRACK arrayDim { $4.add(0, $2); $$ = $4; }
+arrayDim : LBRACK expr RBRACK { $$ = new std::vector<ASTNode*>(); $$->push_back($2); }
+           | LBRACK expr RBRACK arrayDim { $4->push_back($2); $$ = $4; }
 ;
 
 
-binaryExpr : expr PLUS expr { $$ = new BinaryExpr($1, BinaryExpr::PLUS, $3); }
-             | expr MUL expr { $$ = new BinaryExpr($1, BinaryExpr::MUL, $3); }
+binaryExpr : expr ADD expr { $$ = new BinaryExpr($1, BinaryExpr::ADD, $3); }
+             | expr TIMES expr { $$ = new BinaryExpr($1, BinaryExpr::TIMES, $3); }
              | expr ASSIGN expr { $$ = new BinaryExpr($1, BinaryExpr::ASSIGN, $3); }
              | expr MINUS expr  { $$ = new BinaryExpr($1, BinaryExpr::MINUS, $3); }
-             | expr DIV expr  { $$ = new BinaryExpr($1, BinaryExpr::DIV, $3); }
+             | expr DIVIDE expr  { $$ = new BinaryExpr($1, BinaryExpr::DIVIDE, $3); }
              | expr MOD expr { $$ = new BinaryExpr($1, BinaryExpr::MOD, $3); }
-             | expr PLUSASSIGN expr  { $$ = new BinaryExpr($1, BinaryExpr::PLUSASSIGN, $3); }
+             | expr ADDASSIGN expr  { $$ = new BinaryExpr($1, BinaryExpr::ADDASSIGN, $3); }
              | expr MINUSASSIGN expr { $$ = new BinaryExpr($1, BinaryExpr::MINUSASSIGN, $3); }
-             | expr MULASSIGN expr { $$ = new BinaryExpr($1, BinaryExpr::MULASSIGN, $3); }
-             | expr DIVASSIGN expr { $$ = new BinaryExpr($1, BinaryExpr::DIVASSIGN, $3); }
+             | expr TIMESASSIGN expr { $$ = new BinaryExpr($1, BinaryExpr::TIMESASSIGN, $3); }
+             | expr DIVIDEASSIGN expr { $$ = new BinaryExpr($1, BinaryExpr::DIVIDEASSIGN, $3); }
              | expr MODASSIGN expr { $$ = new BinaryExpr($1, BinaryExpr::MODASSIGN, $3); }
-		     | expr LT expr { $$ = new BinaryExpr($1, BinaryExpr::LT, $3); }
-                | expr GT expr { $$ = new BinaryExpr($1, BinaryExpr::GT, $3); }
-                | expr LE expr { $$ = new BinaryExpr($1, BinaryExpr::LE, $3); }
-                | expr GE expr { $$ = new BinaryExpr($1, BinaryExpr::GE, $3); }
-                | expr EQ expr { $$ = new BinaryExpr($1, BinaryExpr::EQ, $3); }
-                | expr NE expr { $$ = new BinaryExpr($1, BinaryExpr::NE, $3); }
+		     | expr LESSEQUAL expr { $$ = new BinaryExpr($1, BinaryExpr::LESSEQUAL, $3); }
+                | expr GREATER expr { $$ = new BinaryExpr($1, BinaryExpr::GREATER, $3); }
+                | expr LESS expr { $$ = new BinaryExpr($1, BinaryExpr::LESS, $3); }
+                | expr GREATEREQUAL expr { $$ = new BinaryExpr($1, BinaryExpr::GREATEREQUAL, $3); }
+                | expr EQUAL expr { $$ = new BinaryExpr($1, BinaryExpr::EQUAL, $3); }
+                | expr NOTEQUAL expr { $$ = new BinaryExpr($1, BinaryExpr::NOTEQUAL, $3); }
 ;
 
 whileStmt : WHILE LPAREN expr RPAREN stmt
