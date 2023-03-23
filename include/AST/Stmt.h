@@ -1,3 +1,6 @@
+#ifndef STMT_H
+#define STMT_H
+
 #include "AST/ASTNode.h"
 #include "exceptions/SemanticException.h"
 
@@ -13,3 +16,4 @@ protected:
     int return_type{};
 };
 
+#endif //STMT_H

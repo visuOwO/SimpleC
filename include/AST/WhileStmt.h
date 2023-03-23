@@ -1,3 +1,6 @@
+#ifndef WHILESTMT_H
+#define WHILESTMT_H
+
 #include "AST/Stmt.h"
 #include "AST/Expr.h"
 #include "exceptions/SemanticException.h"
@@ -15,3 +18,5 @@ private:
     Expr* expr{};
     Stmt* stmt{};
 };
+
+#endif //WHILESTMT_H

@@ -1,3 +1,6 @@
+#ifndef AST_H
+#define AST_H
+
 #include "ArrayExpr.h"
 #include "ASTNode.h"
 #include "BinaryExpr.h"
@@ -15,3 +18,6 @@
 #include "Stmt.h"
 #include "Types.h"
 #include "WhileStmt.h"
+#include "Program.h"
+
+#endif //AST_H

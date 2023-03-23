@@ -1,3 +1,6 @@
+#ifndef TYPES_H
+#define TYPES_H
+
 #include <vector>
 #include <string>
 #include <iostream>
@@ -15,3 +18,5 @@ class Types {
         std::vector<int> Dims;
         int type{};
 };
+
+#endif //TYPES_H

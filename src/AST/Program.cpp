@@ -2,14 +2,18 @@
 
 #include <utility>
 
-Program::Program()
-= default;
+Program::Program() {
+    this->funName = "";
+    this->decls = {};
+    this->stmts = {};
+    this->type = 0;
+}
 
-Program::Program(std::string funName, int type, std::vector<ASTNode*> decls, std::vector<ASTNode*> stmts)
+Program::Program(std::string* funName, int type, std::vector<ASTNode*>* decls, std::vector<ASTNode*>* stmts)
 {
-    this->funName = std::move(funName);
-    this->decls = std::move(decls);
-    this->stmts = std::move(stmts);
+    this->funName = *funName;
+    this->decls = *decls;
+    this->stmts = *stmts;
     this->type = type;
 }
 

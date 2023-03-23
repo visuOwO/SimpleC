@@ -1,3 +1,6 @@
+#ifndef EMPTYSTMT_H
+#define EMPTYSTMT_H
+
 #include "exceptions/SemanticException.h"
 #include "AST/Stmt.h"
 
@@ -10,3 +13,5 @@ public:
     void check() override;
     void genCode() override;
 };
+
+#endif //EMPTYSTMT_H

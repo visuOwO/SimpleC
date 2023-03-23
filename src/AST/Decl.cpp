@@ -17,7 +17,6 @@ void Decl::check()
         std::cout << "Error: Redeclaration of variable " << this->Name << std::endl;
         exit(1);
     }
-    this->type.check();
 }
 
 void Decl::genCode()
@@ -25,7 +24,10 @@ void Decl::genCode()
     std::cout << "Decl genCode" << std::endl;
 }
 
-Decl::Decl(std::string name, const Types& type) {
-    this->Name = std::move(name);
+Decl::Decl(std::string* name, const int type, std::vector<int> *dims) {
+    this->Name = *name;
     this->type = type;
+    this->dims = *dims;
 }
+
+

@@ -1,3 +1,6 @@
+#ifndef FORSTMT_H
+#define FORSTMT_H
+
 #include "AST/Stmt.h"
 #include "AST/Expr.h"
 #include "exceptions/SemanticException.h"
@@ -17,3 +20,5 @@
         Expr* incr{};
         Stmt* body{};
  };
+
+#endif //FORSTMT_H

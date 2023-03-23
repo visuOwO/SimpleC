@@ -1,3 +1,6 @@
+#ifndef BLOCKSTMT_H
+#define BLOCKSTMT_H
+
 #include "AST/Stmt.h"
 #include "exceptions/SemanticException.h"
 
@@ -17,3 +20,5 @@
     private:
         std::vector<Stmt> stmts;
 };
+
+#endif //BLOCKSTMT_H

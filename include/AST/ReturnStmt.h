@@ -1,3 +1,6 @@
+#ifndef RETURNSTMT_H
+#define RETURNSTMT_H
+
 #include "AST/Stmt.h"
 #include "AST/Expr.h"
 #include "exceptions/SemanticException.h"
@@ -14,3 +17,5 @@ public:
 private:
     Expr* expr{};
 };
+
+#endif //RETURNSTMT_H

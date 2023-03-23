@@ -1,3 +1,6 @@
+#ifndef IDENTEXPR_H
+#define IDENTEXPR_H
+
 #include "AST/Expr.h"
 #include "exceptions/SemanticException.h"
 #include "AST/ASTNode.h"
@@ -15,3 +18,5 @@ public:
     void check() override;
     void genCode() override;
 };
+
+#endif //IDENTEXPR_H

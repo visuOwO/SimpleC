@@ -1,3 +1,6 @@
+#ifndef BINARYEXPR_H
+#define BINARYEXPR_H
+
 #include "AST/Expr.h"
 #include "exceptions/SemanticException.h"
 
@@ -31,3 +34,5 @@ private:
     Expr right;
     int op{};
 };
+
+#endif //BINARYEXPR_H

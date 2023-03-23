@@ -1,3 +1,6 @@
+#ifndef IFSTMT_H
+#define IFSTMT_H
+
 #include "AST/Stmt.h"
 #include "AST/Expr.h"
 #include "exceptions/SemanticException.h"
@@ -17,3 +20,5 @@ private:
     Stmt* then{};
     Stmt* els{};
 };
+
+#endif //IFSTMT_H

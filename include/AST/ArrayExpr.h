@@ -1,3 +1,6 @@
+#ifndef ARRAYEXPR_H
+#define ARRAYEXPR_H
+
 #include "AST/Expr.h"
 #include "exceptions/SemanticException.h"
 
@@ -19,3 +22,5 @@ private:
     std::string name;
     std::vector<Expr> exprs;
 };
+
+#endif //ARRAYEXPR_H

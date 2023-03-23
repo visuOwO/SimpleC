@@ -1,3 +1,6 @@
+#ifndef EXPR_H
+#define EXPR_H
+
 #include "exceptions/SemanticException.h"
 #include "AST/ASTNode.h"
 
@@ -12,3 +15,5 @@ public:
     void check() override;
     void genCode() override;
 };
+
+#endif //EXPR_H

@@ -1,3 +1,6 @@
+#ifndef INTCONSTEXPR_H
+#define INTCONSTEXPR_H
+
 #include "AST/Expr.h"
 #include "exceptions/SemanticException.h"
 
@@ -15,3 +18,4 @@ public:
     void genCode() override;
 };
 
+#endif //INTCONSTEXPR_H

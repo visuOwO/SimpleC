@@ -1,3 +1,6 @@
+#ifndef DOUBLECONSTEXPR_H
+#define DOUBLECONSTEXPR_H
+
 #include "AST/Expr.h"
 #include "exceptions/SemanticException.h"
 
@@ -13,4 +16,6 @@ public:
     void check() override;
     void genCode() override;
 };
+
+#endif //DOUBLECONSTEXPR_H
 

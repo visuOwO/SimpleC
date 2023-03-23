@@ -1,3 +1,6 @@
+#ifndef EXPRSTMT_H
+#define EXPRSTMT_H
+
 #include "AST/Stmt.h"
 #include "AST/Expr.h"
 #include "exceptions/SemanticException.h"
@@ -14,3 +17,5 @@ class ExprStmt: public Stmt
     private:
         Expr* expr{};
 };
+
+#endif //EXPRSTMT_H
