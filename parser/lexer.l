@@ -1,8 +1,10 @@
 %{
-    #include <stdio.h>
-    #include <stdlib.h>
+    #include <cstdio>
+    #include <cstdlib>
     #include <string>
-    #include "Parser.tab.h"
+    #include <vector>
+    #include "parser.hpp"
+    #include "AST/AST.h"
 
     int symbol(char* name, int token) {
         printf("%s\n", name);
