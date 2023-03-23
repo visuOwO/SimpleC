@@ -5,11 +5,6 @@
 IdentExpr::IdentExpr()
 = default;
 
-IdentExpr::IdentExpr(std::string ident)
-{
-    this->id = std::move(ident);
-}
-
 IdentExpr::~IdentExpr()
 = default;
 
@@ -32,6 +27,10 @@ void IdentExpr::check()
 void IdentExpr::genCode()
 {
     std::cout << this->id;
+}
+
+IdentExpr::IdentExpr(std::string *id) {
+    this->id = *id;
 }
 
 

@@ -8,12 +8,6 @@ ArrayExpr::ArrayExpr()
 ArrayExpr::~ArrayExpr()
 = default;
 
-ArrayExpr::ArrayExpr(std::string name, std::vector<Expr> exprs)
-{
-    this->name = std::move(name);
-    this->exprs = std::move(exprs);
-}
-
 std::string ArrayExpr::getName()
 {
     return name;
@@ -48,4 +42,12 @@ void ArrayExpr::check() {
 void ArrayExpr::genCode() {
     for (auto & expr : exprs)
         expr.genCode();
+}
+
+ArrayExpr::ArrayExpr(std::string *name, std::vector<ASTNode *> *exprs) {
+    this->name = *name;
+    for (auto & expr : *exprs)
+    {
+        this->exprs.push_back(*dynamic_cast<Expr*>(expr));
+    }
 }

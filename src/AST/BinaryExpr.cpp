@@ -3,13 +3,6 @@
 BinaryExpr::~BinaryExpr()
 = default;
 
-BinaryExpr::BinaryExpr(const Expr& left, const Expr& right, int op)
-{
-    this->left = left;
-    this->right = right;
-    this->op = op;
-}
-
 void BinaryExpr::print() {
     std::cout << "(";
     left.print();
@@ -79,5 +72,11 @@ void BinaryExpr::check()
 
 void BinaryExpr::genCode() {
     //TODO: implement this
+}
+
+BinaryExpr::BinaryExpr(Expr *left, int op, Expr *right) {
+    this->left = *left;
+    this->right = *right;
+    this->op = op;
 }
 

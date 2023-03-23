@@ -10,7 +10,7 @@ class IdentExpr: public Expr
 protected:
     std::string id;
 public:
-    explicit IdentExpr(std::string id);
+    explicit IdentExpr(std::string* id);
     IdentExpr();
     ~IdentExpr() override;
     std::string getId();

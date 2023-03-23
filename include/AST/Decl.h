@@ -10,7 +10,7 @@
 class Decl: public ASTNode {
     public:
         Decl();
-        Decl(std::string* name, const int type, std::vector<int>* dims);
+        Decl(std::string* name, int type, std::vector<int>* dims);
         ~Decl() override;
         std::string Name;
         int type{};

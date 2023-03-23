@@ -12,7 +12,7 @@
         BlockStmt();
         ~BlockStmt() override;
 
-        BlockStmt(std::vector<Stmt> stmts);
+        explicit BlockStmt(std::vector<ASTNode*>* stmts);
         std::vector<Stmt> getStmts();
         void print() override;
         void check() override;

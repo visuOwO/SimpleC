@@ -8,10 +8,6 @@ BlockStmt::BlockStmt()
 BlockStmt::~BlockStmt()
 = default;
 
-BlockStmt::BlockStmt(std::vector<Stmt> stmts)
-{
-    this->stmts = std::move(stmts);
-}
 
 std::vector<Stmt> BlockStmt::getStmts()
 {
@@ -43,4 +39,12 @@ void BlockStmt::genCode()
     {
         stmt.genCode();
     }
-}   
+}
+
+BlockStmt::BlockStmt(std::vector<ASTNode *> *stmts) {
+    for (auto & stmt : *stmts)
+    {
+        this->stmts.push_back(*dynamic_cast<Stmt*>(stmt));
+    }
+
+}

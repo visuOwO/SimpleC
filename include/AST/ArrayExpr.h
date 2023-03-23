@@ -12,7 +12,7 @@ class ArrayExpr: public Expr
 public:
     ArrayExpr();
     ~ArrayExpr() override;
-    ArrayExpr(std::string name, std::vector<Expr> exprs);
+    ArrayExpr(std::string* name, std::vector<ASTNode*>* exprs);
     std::string getName();
     std::vector<Expr> getExprs();
     void print() override;

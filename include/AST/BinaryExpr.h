@@ -8,7 +8,7 @@ class BinaryExpr: public Expr
 {
 public:
     ~BinaryExpr() override;
-    BinaryExpr(const Expr& left, const Expr& right, int op);
+    BinaryExpr(Expr* left, int op, Expr* right);
     void print() override;
     void check() override;
     void genCode() override;
