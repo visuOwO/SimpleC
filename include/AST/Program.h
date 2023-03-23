@@ -10,7 +10,7 @@ class Program: public ASTNode
 {
 public:
     Program();
-    Program(std::string funName, std::vector<ASTNode*> decls, std::vector<ASTNode*> stmts);
+    Program(std::string funName, int type, std::vector<ASTNode*> decls, std::vector<ASTNode*> stmts);
     ~Program() override;
     void print() override;
     void check() override;
@@ -19,4 +19,5 @@ private:
     std::string funName; 
     std::vector<ASTNode*> stmts;
     std::vector<ASTNode*> decls;
+    int type{};
 };

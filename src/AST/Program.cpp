@@ -5,11 +5,12 @@
 Program::Program()
 = default;
 
-Program::Program(std::string funName, std::vector<ASTNode*> decls, std::vector<ASTNode*> stmts)
+Program::Program(std::string funName, int type, std::vector<ASTNode*> decls, std::vector<ASTNode*> stmts)
 {
     this->funName = std::move(funName);
     this->decls = std::move(decls);
     this->stmts = std::move(stmts);
+    this->type = type;
 }
 
 Program::~Program()

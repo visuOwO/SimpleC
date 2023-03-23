@@ -1,8 +1,11 @@
 %{
-	#include "AST/AST.h"
+	#include "AST/Program.h"
+	#include "AST/Expr.h"
 	#include <cstdio>
 	#include <cstdlib>
 	#include <string>
+	#include <iostream>
+	#include <vector>
 
 	int yyerror(char *s);
 	int yylex();
@@ -10,19 +13,16 @@
 
 %union {
 	Program *program;
-	LinkedList<Decl> *declList;
+	std::vector<Decl> *declList;
 	Decl *decl;
-	LinkedList<Stmt> *stmtList;
+	std::vector<Stmt> *stmtList;
 	Stmt *stmt;
-	LinkedList<Expr> *exprList;
-	Expr *expr, *l_expr, *identExpr, *arrayDim, *binaryExpr;
-	LinkedList<Integer> *arrayDecl;
-	LinkedList<Expr> *arrayDim;
-	int INTCONST;
-	double DOUBLECONST;
-	char *ident;
-	int i;
-	double d;
+	Expr *expr, *l_expr, *identExpr, *binaryExpr;
+	std::vector<int> *arrayDecl;
+	std::vector<Expr> *arrayDim;
+	std::string *ident;
+	int intconst;
+	double doubleconst;
 }
 
 %token INT DOUBLE RETURN IF ELSE WHILE FOR
@@ -30,15 +30,18 @@
 %token PLUSASSIGN MINUSASSIGN MULASSIGN DIVASSIGN MODASSIGN
 %token LT GT LE GE EQ NE
 %token LPAREN RPAREN LBRACE RBRACE LBRACK RBRACK SEMICOLON
-%token <int> INTCONST
-%token <double> DOUBLECONST
-%token <std::string> IDENT
+%token <intconst> INTCONST
+%token <doubleconst> DOUBLECONST
+%token <ident> IDENT
 
 %type <program> program
-%type <decl> declList decl
-%type <stmt> stmtList stmt ifStmt forStmt whileStmt
-%type <expr> expr l_expr arrayDim binaryExpr
+%type <decl> decl
+%type <declList> declList
+%type <stmt> stmt ifStmt forStmt whileStmt
+%type <stmtList> stmtList
+%type <expr> expr l_expr binaryExpr
 %type <arrayDecl> arrayDecl
+%type <arrayDim> arrayDim
 
 
 %right ASSIGN PLUSASSIGN MINUSASSIGN MULASSIGN DIVASSIGN MODASSIGN
@@ -52,11 +55,11 @@
 
 program : INT IDENT LPAREN RPAREN LBRACE declList stmtList RBRACE
             {
-            	$$ = new Program($2, Types.INT, $6, $7);
+            	$$ = new Program($2, Types::INT, $6, $7);
             }
           | DOUBLE IDENT LPAREN RPAREN LBRACE declList stmtList RBRACE
 	    	{
-	    		$$ = new Program($2, Types.DOUBLE, $6, $7);
+	    		$$ = new Program($2, Types::DOUBLE, $6, $7);
 	    	}
 ;
 declList : /* empty list */ { $$ = new LinkedList<Decl>(); }
@@ -65,8 +68,8 @@ declList : /* empty list */ { $$ = new LinkedList<Decl>(); }
            		$$ = $2;
            }
 ;
-decl : INT IDENT arrayDecl SEMICOLON { $$ = new Decl($2, Types.INT, $3); }
-       | DOUBLE IDENT arrayDecl SEMICOLON { $$ = new Decl($2, Types.DOUBLE, $3);}
+decl : INT IDENT arrayDecl SEMICOLON { $$ = new Decl($2, Types::INT, $3); }
+       | DOUBLE IDENT arrayDecl SEMICOLON { $$ = new Decl($2, Types::DOUBLE, $3);}
 ;
 arrayDecl : /* empty list */ { $$ = new LinkedList<Integer>(); }
             | LBRACK INTCONST RBRACK arrayDecl { $4.add(0, $2); $$ = $4; }
