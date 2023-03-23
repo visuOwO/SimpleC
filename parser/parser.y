@@ -1,9 +1,8 @@
 %{
 	#include "AST/AST.h"
-	#include <stdio.h>
-	#include <stdlib.h>
-	#include <string.h>
-	#include <ctype.h>
+	#include <cstdio>
+	#include <cstdlib>
+	#include <string>
 
 	int yyerror(char *s);
 	int yylex();
@@ -16,44 +15,38 @@
 	LinkedList<Stmt> *stmtList;
 	Stmt *stmt;
 	LinkedList<Expr> *exprList;
-	Expr *expr;
+	Expr *expr, *l_expr, *identExpr, *arrayDim, *binaryExpr;
 	LinkedList<Integer> *arrayDecl;
 	LinkedList<Expr> *arrayDim;
-	BinaryExpr *binaryExpr;
-	ForStmt *forStmt;
-	WhileStmt *whileStmt;
-	LExpr *l_expr;
-	IdentExpr *identExpr;
 	int INTCONST;
 	double DOUBLECONST;
+	char *ident;
+	int i;
+	double d;
 }
 
 %token INT DOUBLE RETURN IF ELSE WHILE FOR
 %token PLUS MINUS MUL DIV MOD ASSIGN
 %token PLUSASSIGN MINUSASSIGN MULASSIGN DIVASSIGN MODASSIGN
 %token LT GT LE GE EQ NE
-%token INTCONST DOUBLECONST IDENT
 %token LPAREN RPAREN LBRACE RBRACE LBRACK RBRACK SEMICOLON
+%token <int> INTCONST
+%token <double> DOUBLECONST
+%token <std::string> IDENT
 
 %type <program> program
 %type <decl> declList decl
-%type <stmt> stmtList stmt
+%type <stmt> stmtList stmt ifStmt forStmt whileStmt
 %type <expr> expr l_expr arrayDim binaryExpr
-%type <identExpr> IDENT
 %type <arrayDecl> arrayDecl
-%type <forStmt> forStmt
-%type <whileStmt> whileStmt
-%type <int> INTCONST
-%type <double> DOUBLECONST
+
 
 %right ASSIGN PLUSASSIGN MINUSASSIGN MULASSIGN DIVASSIGN MODASSIGN
 %left EQ NE
 %left LT GT LE GE
 %left PLUS MINUS
 %left MUL DIV MOD
-
 %left ELSE
-
 
 %%
 
@@ -84,14 +77,17 @@ stmtList : /* empty list */ { $$ = new LinkedList<Stmt>(); }
 stmt : expr SEMICOLON { $$ = new ExprStmt($1); }
        | RETURN expr SEMICOLON { $$ = new ReturnStmt($2); }
        | LBRACE stmtList RBRACE { $$ = new BlockStmt($2); }
-       | IF LPAREN expr RPAREN stmt
-         { $$ = new IfStmt($3, $5, null); }
-       | IF LPAREN expr RPAREN stmt ELSE stmt
-         { $$ = new IfStmt($3, $5, $7); }
+       | ifStmt { $$ = $1; }
        | SEMICOLON { $$ = new EmptyStmt(); }
        | forStmt { $$ = $1; }
          | whileStmt { $$ = $1; }
 ;
+
+ifStmt : IF LPAREN expr RPAREN stmt
+         { $$ = new IfStmt($3, $5, null); }
+       | IF LPAREN expr RPAREN stmt ELSE stmt
+         { $$ = new IfStmt($3, $5, $7); }
+
 expr : INTCONST { $$ = new IntConstExpr($1); }
        | DOUBLECONST { $$ = new DoubleConstExpr($1); }
        | l_expr { $$ = $1; }
@@ -132,6 +128,19 @@ whileStmt : WHILE LPAREN expr RPAREN stmt
 forStmt : FOR LPAREN expr SEMICOLON expr SEMICOLON expr RPAREN stmt
 		{ $$ = new ForStmt($3, $5, $7, $9); }
 ;
+
+%%
+
+int yyerror(char *s) {
+    printf("Error: %s", s);
+    return 0;
+}
+
+int main(int argc, char **argv) {
+    yyparse();
+    return 0;
+}
+
 
 
 
