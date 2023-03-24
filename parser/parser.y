@@ -7,7 +7,8 @@
 	#include <vector>
 
 	int yyerror(char *s);
-	int yylex();
+	extern int yylex();
+	int yywrap() { return 1; }
 %}
 
 %union {
@@ -18,8 +19,8 @@
 	Expr *expr, *l_expr, *identExpr, *binaryExpr;
 	std::vector<int> *arrayDecl;
 	std::string *ident;
-	int intconst;
-	double doubleconst;
+	int intVal;
+	double doubleVal;
 }
 
 %token INT DOUBLE RETURN IF ELSE WHILE FOR
@@ -27,8 +28,8 @@
 %token ADDASSIGN MINUSASSIGN TIMESASSIGN DIVIDEASSIGN MODASSIGN
 %token LESSEQUAL GREATER LESS GREATEREQUAL EQUAL NOTEQUAL
 %token LPAREN RPAREN LBRACE RBRACE LBRACK RBRACK SEMICOLON
-%token <intconst> INTCONST
-%token <doubleconst> DOUBLECONST
+%token <intVal> INTCONST
+%token <doubleVal> DOUBLECONST
 %token <ident> IDENT
 
 %type <program> program
@@ -140,7 +141,3 @@ int main(int argc, char **argv) {
     yyparse();
     return 0;
 }
-
-
-
-

@@ -6,11 +6,12 @@
     #include "AST/AST.h"
     #include "parser.hpp"
 
-    int symbol(std::string name, int token) {
-        std::cout << name << std::endl;
-        return token;
-    }
+    int symbol(std::string name, int token);
+    int convertToInt(char* s);
+    double convertToDouble(char* s);
 %}
+
+%option noyywrap
 
 nonDigit  [a-zA-Z_]
 digit  [0-9]
@@ -63,39 +64,39 @@ comments  \/\/({new_line}|[^])*|\/\*([^*]|\*+[^*/])*\*+\/
 
 %%
 
-"int"             { return symbol("int",         INT); }
-"double"          { return symbol("double",      DOUBLE); }
-"return"          { return symbol("return",      RETURN); }
-"if"              { return symbol("if",          IF); }
-"else"            { return symbol("else",        ELSE); }
-"while"           { return symbol("while",       WHILE); }
-"for"             { return symbol("for",         FOR); }
+"int"             { return INT; }
+"double"          { return DOUBLE; }
+"return"          { return RETURN; }
+"if"              { return IF; }
+"else"            { return ELSE; }
+"while"           { return WHILE; }
+"for"             { return FOR; }
 
-{IntLiteral}      { return symbol("Intconst", INTCONST, Integer.decode(yytext())); }
-{DoubleLiteral}   { return symbol("Doubleconst", DOUBLECONST, Double.valueOf(yytext())); }
+{IntLiteral}      { yylval.intVal = convertToInt(yytext); return INTCONST; }
+{DoubleLiteral}   { yylval.doubleVal = convertToDouble(yytext); return DOUBLECONST; }
 
-{Ident}           { return symbol("ID", IDENT, yytext()); }
+{Ident}           { yylval.ident = new std::string(yytext); return IDENT; }
 
-";"               { return symbol(";",  SEMICOLON); }
-"("               { return symbol("(",  LPAREN); }
-")"               { return symbol(")",  RPAREN); }
-"["               { return symbol("[",  LBRACK); }
-"]"               { return symbol("]",  RBRACK); }
-"{"               { return symbol("{",  LBRACE); }
-"}"               { return symbol("}",  RBRACE); }
+";"               { return SEMICOLON; }
+"("               { return LPAREN; }
+")"               { return RPAREN; }
+"["               { return LBRACK; }
+"]"               { return RBRACK; }
+"{"               { return LBRACE; }
+"}"               { return RBRACE; }
 
 
-"="               { return symbol("=",  ASSIGN); }
-"+"              { return symbol("+",  ADD); }
-"*"              { return symbol("*",  TIMES); }
-"-"              { return symbol("-",  MINUS); }
-"/"              { return symbol("/",  DIVIDE); }
-"%"              { return symbol("%",  MOD); }
-"+="              { return symbol("+=", ADDASSIGN); }
-"-="              { return symbol("-=", MINUSASSIGN); }
-"*="              { return symbol("*=", TIMESASSIGN); }
-"/="              { return symbol("/=", DIVIDEASSIGN); }
-"%="              { return symbol("%=", MODASSIGN); }
+"="               { return ASSIGN; }
+"+"              { return ADD; }
+"*"              { return TIMES; }
+"-"              { return MINUS; }
+"/"              { return DIVIDE; }
+"%"              { return MOD; }
+"+="              { return ADDASSIGN; }
+"-="              { return MINUSASSIGN; }
+"*="              { return TIMESASSIGN; }
+"/="              { return DIVIDEASSIGN; }
+"%="              { return MODASSIGN; }
 
 
 "<"             { return symbol("<",  LESS); }
@@ -111,3 +112,18 @@ comments  \/\/({new_line}|[^])*|\/\*([^*]|\*+[^*/])*\*+\/
 {white_space}   { /* ignore white space */ }
 
 %%
+
+int symbol(std::string name, int token) {
+    std::cout << name << std::endl;
+    return token;
+}
+
+int convertToInt(char* s) {
+    std::string str(s);
+    return std::stoi(str);
+}
+
+double convertToDouble(char* s) {
+    std::string str(s);
+    return std::stod(str);
+}
